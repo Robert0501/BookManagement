@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Facultate/Anul IV/Semestrul II/Calcul Mobil/Proiect/app/src/main/res/drawable/ic_launcher_background.xml" value="0.35555555555555557" />
+        <entry key="..\:/Facultate/Anul IV/Semestrul II/Calcul Mobil/Proiect/app/src/main/res/layout/activity_main.xml" value="0.33061594202898553" />
+        <entry key="..\:/Facultate/Anul IV/Semestrul II/Calcul Mobil/Proiect/app/src/main/res/layout/addbooks.xml" value="0.33061594202898553" />
+        <entry key="..\:/Facultate/Anul IV/Semestrul II/Calcul Mobil/Proiect/app/src/main/res/layout/book_info.xml" value="0.33061594202898553" />
+        <entry key="..\:/Facultate/Anul IV/Semestrul II/Calcul Mobil/Proiect/app/src/main/res/layout/borrow_to.xml" value="0.33061594202898553" />
+        <entry key="..\:/Facultate/Anul IV/Semestrul II/Calcul Mobil/Proiect/app/src/main/res/layout/home.xml" value="0.33061594202898553" />
+        <entry key="..\:/Facultate/Anul IV/Semestrul II/Calcul Mobil/Proiect/app/src/main/res/layout/library.xml" value="0.33061594202898553" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
