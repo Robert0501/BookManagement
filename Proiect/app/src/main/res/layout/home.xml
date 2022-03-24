@@ -11,75 +11,115 @@
         android:id="@+id/Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="68dp"
         android:text="Library"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="106dp" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/addBooks"
         android:layout_width="145dp"
         android:layout_height="145dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="92dp"
+        android:onClick="goToAddBooks"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.987"
+        app:layout_constraintStart_toEndOf="@+id/borrowBooks"
         app:srcCompat="@drawable/add_books"
-        tools:layout_editor_absoluteX="250dp"
-        tools:layout_editor_absoluteY="491dp" />
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <ImageView
         android:id="@+id/borrowBooks"
         android:layout_width="145dp"
         android:layout_height="145dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="92dp"
+        android:onClick="goToBorrowTo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/library"
+        app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/borrow"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="491dp" />
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <ImageView
         android:id="@+id/favoriteBooks"
         android:layout_width="145dp"
         android:layout_height="145dp"
-        app:srcCompat="@drawable/favorite"
-        tools:layout_editor_absoluteX="250dp"
-        tools:layout_editor_absoluteY="187dp" />
+        android:layout_marginTop="192dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintBottom_toTopOf="@+id/addBooks"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/favorite" />
 
     <ImageView
         android:id="@+id/library"
         android:layout_width="145dp"
         android:layout_height="145dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="192dp"
+        android:onClick="goToLibrary"
+        app:layout_constraintEnd_toStartOf="@+id/favoriteBooks"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/library"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="187dp" />
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <TextView
         android:id="@+id/addBooksText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="68dp"
+        android:layout_marginBottom="92dp"
         android:text="@string/add_books"
-        tools:layout_editor_absoluteX="290dp"
-        tools:layout_editor_absoluteY="617dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/favoriteText"
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/borrowText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
+        android:layout_marginEnd="180dp"
+        android:layout_marginBottom="92dp"
         android:text="Borrow"
-        tools:layout_editor_absoluteX="66dp"
-        tools:layout_editor_absoluteY="617dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/addBooksText"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/libraryText"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/favoriteText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="316dp"
+        android:layout_marginEnd="80dp"
+        android:text="Favorite"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/libraryText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Library"
-        tools:layout_editor_absoluteX="66dp"
-        tools:layout_editor_absoluteY="313dp" />
-
-    <TextView
-        android:id="@+id/favoriteText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Favorite"
-        tools:layout_editor_absoluteX="290dp"
-        tools:layout_editor_absoluteY="313dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.163"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.485" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
