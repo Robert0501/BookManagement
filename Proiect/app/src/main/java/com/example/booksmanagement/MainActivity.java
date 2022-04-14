@@ -6,11 +6,18 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.booksmanagement.Model.Book;
+import com.example.booksmanagement.Model.Library;
+
 
 import java.util.Calendar;
 
@@ -21,7 +28,18 @@ public class MainActivity extends AppCompatActivity {
     ProgressBar pb;
     Button startButton;
 
+    Book borrowedBook;
+    String borrowToName;
+    String date;
+
     int progress = 0;
+
+    LinearLayout libraryLayout;
+    LinearLayout favoriteLayout;
+    LinearLayout borrowLayout;
+    private Button addToBorrow;
+    private Button borrowedDate;
+    private TextView borrowToIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,24 +108,166 @@ public class MainActivity extends AppCompatActivity {
 
     public void goToLibrary(View v){
         setContentView(R.layout.library);
+        libraryLayout = findViewById(R.id.libraryLayout);
+
+        addToBorrow = findViewById(R.id.borrowBook);
+        borrowToIn = findViewById(R.id.borrowToIn);
+        borrowedDate = findViewById(R.id.datePickerButton);
+
+        TextView textViews [] = new TextView[100];
+        Button borrowTo [] = new Button[100];
+        Button addToFavorite [] = new Button[100];
+
+        for(int i = 0 ; i < textViews.length ; i++){
+            textViews[i] = new TextView(MainActivity.this);
+            borrowTo[i] = new Button(MainActivity.this);
+            addToFavorite[i] = new Button(MainActivity.this);
+        }
+
+
+        for(int i = 0 ; i < Library.totalBooks ; i++){
+            textViews[i].setText("\nTitle: " + Library.books[i].getName() +"\n" +
+                    "Author: " + Library.books[i].getAuthor() + "\n" +
+                    "Category: " + Library.books[i].getCategory());
+            textViews[i].setTextSize(TypedValue.COMPLEX_UNIT_SP,16);
+            borrowTo[i].setText("Borrow");
+            addToFavorite[i].setText("Favorite");
+            libraryLayout.addView(textViews[i]);
+            libraryLayout.addView(borrowTo[i]);
+            libraryLayout.addView(addToFavorite[i]);
+
+            int finalI = i;
+            borrowTo[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setContentView(R.layout.borrow_to);
+                    initDatePicker();
+                    dateButton = findViewById(R.id.datePickerButton);
+                    dateButton.setText(getTodaysDate());
+                    borrowedBook = new Book(Library.books[finalI].getName(),Library.books[finalI].getAuthor(),Library.books[finalI].getCategory());
+
+                }
+            });
+
+            addToFavorite[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Library.addToFavorite(Library.books[finalI].getName(),Library.books[finalI].getAuthor(),Library.books[finalI].getCategory());
+                    Toast.makeText(MainActivity.this, Library.books[finalI].getName() + " has been added to favorite list", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
+
+
+        TextView totalBooks = new TextView(MainActivity.this);
+        String totalBooksString = "Total books in library: " + Library.totalBooks;
+        totalBooks.setText(totalBooksString);
+        totalBooks.setTextSize(TypedValue.COMPLEX_UNIT_SP,18);
+        libraryLayout.addView(totalBooks);
+
+    }
+
+    public void borrowBook(View v){
+        date = dateButton.getText().toString();
+        TextView borrowName;
+        borrowName = findViewById(R.id.borrowToIn);
+        borrowToName = borrowName.getText().toString();
+        if(borrowToName.length() == 0){
+            borrowName.setError("This field is required");
+        }
+            else {
+                Library.addBookToBorrow(borrowedBook.getName(), borrowedBook.getAuthor(), borrowedBook.getCategory(),borrowToName, date);
+                Toast.makeText(MainActivity.this, borrowedBook.getName() + " was added to borrowed books", Toast.LENGTH_SHORT).show();
+                setContentView(R.layout.home);
+            }
     }
 
     public void goToAddBooks(View v){
         setContentView(R.layout.add_books);
+
+       Button addBookButton = findViewById(R.id.addBookButton);
+
+        addBookButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TextView titleIn = findViewById(R.id.titleIn);
+                TextView authorIn = findViewById(R.id.authorIn);
+                TextView categoryIn = findViewById(R.id.categoryIn);
+
+                if(titleIn.length() == 0){
+                    titleIn.setError("This field is required");
+                } else  if(authorIn.length() == 0){
+                    authorIn.setError("This field is required");
+                } else  if(categoryIn.length() == 0){
+                    categoryIn.setError("This field is required");
+                } else {
+                    Library.addBookToLibrary(titleIn.getText().toString(), authorIn.getText().toString(), categoryIn.getText().toString());
+                    Toast.makeText(MainActivity.this, titleIn.getText().toString() + " was added successfully ", Toast.LENGTH_SHORT).show();
+                    setContentView(R.layout.home);
+                }
+            }
+        });
+
     }
 
     public void goToBookInfo(View v){
         setContentView(R.layout.book_info);
     }
 
-    public void goToBorrowTo(View v){
-        setContentView(R.layout.borrow_to);
-        initDatePicker();
-        dateButton = findViewById(R.id.datePickerButton);
-        dateButton.setText(getTodaysDate());
+    public void goToFavorite(View v){
+        setContentView(R.layout.favorite);
+        favoriteLayout = findViewById(R.id.favoriteLayout);
+
+        TextView textViews [] = new TextView[100];
+
+        for(int i = 0 ; i < textViews.length ; i++){
+            textViews[i] = new TextView(MainActivity.this);
+        }
+
+        for(int i = 0 ; i < Library.totalNumberFavoriteBooks; i++) {
+            textViews[i].setText("\nTitle: " + Library.favoriteBooks[i].getName() + "\n" +
+                    "Author: " + Library.favoriteBooks[i].getAuthor() + "\n" +
+                    "Category: " + Library.favoriteBooks[i].getCategory());
+            textViews[i].setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+            favoriteLayout.addView(textViews[i]);
+        }
+
+        TextView totalFavoriteBooks = new TextView(MainActivity.this);
+        String totalNumberFavoriteBooks = "Total favorite books: " + Library.totalNumberFavoriteBooks;
+        totalFavoriteBooks.setText(totalNumberFavoriteBooks);
+        totalFavoriteBooks.setTextSize(TypedValue.COMPLEX_UNIT_SP,18);
+        favoriteLayout.addView(totalFavoriteBooks);
     }
 
+    public void goToBorrow(View v){
+        setContentView(R.layout.borrow);
+        borrowLayout = findViewById(R.id.borrowLayout);
 
+        TextView textViews [] = new TextView[100];
+
+
+
+        for(int i = 0 ; i < textViews.length ; i++){
+            textViews[i] = new TextView(MainActivity.this);
+        }
+
+        for(int i = 0 ; i < Library.totalBorrowBooks; i++) {
+            textViews[i].setText("\nTitle: " + Library.borrowBooks[i].getName() + "\n" +
+                    "Author: " + Library.borrowBooks[i].getAuthor() + "\n" +
+                    "Category: " + Library.borrowBooks[i].getCategory() + "\n" +
+                    "Borrowed to: " + Library.borrowBooks[i].getBorrowToName() + "\n" +
+                    "Borrowed date: " + Library.borrowBooks[i].getDate());
+            textViews[i].setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+            borrowLayout.addView(textViews[i]);
+        }
+
+        TextView totalBorrowedBooks = new TextView(MainActivity.this);
+        String totalNumberBorrowedBooks = "Total borrowed books: " + Library.totalBorrowBooks;
+        totalBorrowedBooks.setText(totalNumberBorrowedBooks);
+        totalBorrowedBooks.setTextSize(TypedValue.COMPLEX_UNIT_SP,18);
+        borrowLayout.addView(totalBorrowedBooks);
+    }
 
     private void initDatePicker() {
         DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {

@@ -3,14 +3,20 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Facultate/Anul IV/Semestrul II/Calcul Mobil/Proiect/app/src/main/res/drawable/file.xml" value="0.3828125" />
+        <entry key="..\:/Facultate/Anul IV/Semestrul II/Calcul Mobil/Proiect/app/src/main/res/drawable/folder.xml" value="0.3828125" />
         <entry key="..\:/Facultate/Anul IV/Semestrul II/Calcul Mobil/Proiect/app/src/main/res/drawable/ic_launcher_background.xml" value="0.35555555555555557" />
         <entry key="..\:/Facultate/Anul IV/Semestrul II/Calcul Mobil/Proiect/app/src/main/res/layout/activity_main.xml" value="0.33061594202898553" />
-        <entry key="..\:/Facultate/Anul IV/Semestrul II/Calcul Mobil/Proiect/app/src/main/res/layout/add_books.xml" value="0.32518115942028986" />
+        <entry key="..\:/Facultate/Anul IV/Semestrul II/Calcul Mobil/Proiect/app/src/main/res/layout/add_books.xml" value="0.33" />
         <entry key="..\:/Facultate/Anul IV/Semestrul II/Calcul Mobil/Proiect/app/src/main/res/layout/addbooks.xml" value="0.33061594202898553" />
         <entry key="..\:/Facultate/Anul IV/Semestrul II/Calcul Mobil/Proiect/app/src/main/res/layout/book_info.xml" value="0.33061594202898553" />
+        <entry key="..\:/Facultate/Anul IV/Semestrul II/Calcul Mobil/Proiect/app/src/main/res/layout/borrow.xml" value="0.36666666666666664" />
         <entry key="..\:/Facultate/Anul IV/Semestrul II/Calcul Mobil/Proiect/app/src/main/res/layout/borrow_to.xml" value="0.33061594202898553" />
+        <entry key="..\:/Facultate/Anul IV/Semestrul II/Calcul Mobil/Proiect/app/src/main/res/layout/bporrow.xml" value="0.30885416666666665" />
+        <entry key="..\:/Facultate/Anul IV/Semestrul II/Calcul Mobil/Proiect/app/src/main/res/layout/favorite.xml" value="0.2703125" />
         <entry key="..\:/Facultate/Anul IV/Semestrul II/Calcul Mobil/Proiect/app/src/main/res/layout/home.xml" value="0.33061594202898553" />
         <entry key="..\:/Facultate/Anul IV/Semestrul II/Calcul Mobil/Proiect/app/src/main/res/layout/library.xml" value="0.33061594202898553" />
+        <entry key="..\:/Facultate/Anul IV/Semestrul II/Calcul Mobil/Proiect/app/src/main/res/layout/list_item.xml" value="0.36666666666666664" />
       </map>
     </option>
   </component>
