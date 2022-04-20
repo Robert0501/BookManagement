@@ -1,9 +1,15 @@
 package com.example.booksmanagement;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -41,6 +47,12 @@ public class MainActivity extends AppCompatActivity {
     private Button borrowedDate;
     private TextView borrowToIn;
 
+    private NotificationManager mNotifyManager;
+    private static final String PRIMARY_CHANNEL_ID = "primary_notification_channel";
+    private static final int NOTIFICATION_ID = 0;
+
+    Book favoritedBook;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
                 new Uploader().execute();
             }
         });
+
+        createNotificationChannel();
     }
 
     class Uploader extends AsyncTask<Void, Integer, Integer>{
@@ -180,6 +194,7 @@ public class MainActivity extends AppCompatActivity {
                 Library.addBookToBorrow(borrowedBook.getName(), borrowedBook.getAuthor(), borrowedBook.getCategory(),borrowToName, date);
                 Toast.makeText(MainActivity.this, borrowedBook.getName() + " was added to borrowed books", Toast.LENGTH_SHORT).show();
                 setContentView(R.layout.home);
+                sendNotification();
             }
     }
 
@@ -213,6 +228,38 @@ public class MainActivity extends AppCompatActivity {
 
     public void goToBookInfo(View v){
         setContentView(R.layout.book_info);
+    }
+
+
+    public void createNotificationChannel() {
+        mNotifyManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel(PRIMARY_CHANNEL_ID, "Mascot Notification", NotificationManager.IMPORTANCE_HIGH);
+            notificationChannel.enableLights(true);
+            notificationChannel.setLightColor(Color.RED);
+            notificationChannel.enableVibration(true);
+            notificationChannel.setDescription("Notification from Mascot");
+            mNotifyManager.createNotificationChannel(notificationChannel);
+        }
+    }
+
+    private NotificationCompat.Builder getNotificationBuilder(){
+        Intent notificationIntent = new Intent(this, MainActivity.class);
+        PendingIntent notificationPendingIntent = PendingIntent.getActivity(this, NOTIFICATION_ID, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        NotificationCompat.Builder notifyBuilder = new NotificationCompat.Builder(this, PRIMARY_CHANNEL_ID)
+                .setContentTitle("Borrowed book")
+                .setContentText( borrowedBook.getName() + " has been borrowed to " + borrowToName)
+                .setSmallIcon(R.drawable.ic_launcher_background)
+                .setContentIntent(notificationPendingIntent)
+                .setAutoCancel(true)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setDefaults(NotificationCompat.DEFAULT_ALL);
+        return notifyBuilder;
+    }
+
+    public void sendNotification() {
+        NotificationCompat.Builder notifyBuilder = getNotificationBuilder();
+        mNotifyManager.notify(NOTIFICATION_ID, notifyBuilder.build());
     }
 
     public void goToFavorite(View v){
