@@ -8,14 +8,22 @@ import android.app.DatePickerDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -26,13 +34,16 @@ import com.example.booksmanagement.Model.Library;
 
 
 import java.util.Calendar;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int RESULT_LOAD_IMAGE = 1;
     private DatePickerDialog datePickerDialog;
     private Button dateButton;
     ProgressBar pb;
     Button startButton;
+    Button browseButton;
 
     Book borrowedBook;
     String borrowToName;
@@ -53,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
 
     Book favoritedBook;
 
+    private SensorManager mSensorManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
         pb = (ProgressBar) findViewById(R.id.progressBar);
         startButton = (Button) findViewById(R.id.startButton);
+        browseButton = findViewById(R.id.browseButton);
 
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,8 +82,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        getSensorList();
+
         createNotificationChannel();
     }
+
 
     class Uploader extends AsyncTask<Void, Integer, Integer>{
 
@@ -131,13 +148,15 @@ public class MainActivity extends AppCompatActivity {
         TextView textViews [] = new TextView[100];
         Button borrowTo [] = new Button[100];
         Button addToFavorite [] = new Button[100];
+        Button deleteButton [] = new Button[100];
+        TextView totalBooks = new TextView(MainActivity.this);
 
         for(int i = 0 ; i < textViews.length ; i++){
             textViews[i] = new TextView(MainActivity.this);
             borrowTo[i] = new Button(MainActivity.this);
             addToFavorite[i] = new Button(MainActivity.this);
+            deleteButton[i] = new Button(MainActivity.this);
         }
-
 
         for(int i = 0 ; i < Library.totalBooks ; i++){
             textViews[i].setText("\nTitle: " + Library.books[i].getName() +"\n" +
@@ -146,9 +165,11 @@ public class MainActivity extends AppCompatActivity {
             textViews[i].setTextSize(TypedValue.COMPLEX_UNIT_SP,16);
             borrowTo[i].setText("Borrow");
             addToFavorite[i].setText("Favorite");
+            deleteButton[i].setText("Delete");
             libraryLayout.addView(textViews[i]);
             libraryLayout.addView(borrowTo[i]);
             libraryLayout.addView(addToFavorite[i]);
+            libraryLayout.addView(deleteButton[i]);
 
             int finalI = i;
             borrowTo[i].setOnClickListener(new View.OnClickListener() {
@@ -170,11 +191,24 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, Library.books[finalI].getName() + " has been added to favorite list", Toast.LENGTH_SHORT).show();
                 }
             });
+
+            deleteButton[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Library.books = Library.removeTheElement(finalI,Library.books);
+                    Library.removeFromFavorite(finalI);
+                    libraryLayout.removeView(textViews[finalI]);
+                    libraryLayout.removeView(borrowTo[finalI]);
+                    libraryLayout.removeView(addToFavorite[finalI]);
+                    libraryLayout.removeView(deleteButton[finalI]);
+                    Library.totalBooks--;
+                    String totalBooksString = "Total books in library: " + Library.totalBooks;
+                    totalBooks.setText(totalBooksString);
+                }
+            });
         }
 
 
-
-        TextView totalBooks = new TextView(MainActivity.this);
         String totalBooksString = "Total books in library: " + Library.totalBooks;
         totalBooks.setText(totalBooksString);
         totalBooks.setTextSize(TypedValue.COMPLEX_UNIT_SP,18);
@@ -190,18 +224,19 @@ public class MainActivity extends AppCompatActivity {
         if(borrowToName.length() == 0){
             borrowName.setError("This field is required");
         }
-            else {
-                Library.addBookToBorrow(borrowedBook.getName(), borrowedBook.getAuthor(), borrowedBook.getCategory(),borrowToName, date);
-                Toast.makeText(MainActivity.this, borrowedBook.getName() + " was added to borrowed books", Toast.LENGTH_SHORT).show();
-                setContentView(R.layout.home);
-                sendNotification();
-            }
+        else {
+            Library.addBookToBorrow(borrowedBook.getName(), borrowedBook.getAuthor(), borrowedBook.getCategory(),borrowToName, date);
+            Toast.makeText(MainActivity.this, borrowedBook.getName() + " was added to borrowed books", Toast.LENGTH_SHORT).show();
+            setContentView(R.layout.home);
+            sendNotification();
+        }
+
     }
 
     public void goToAddBooks(View v){
         setContentView(R.layout.add_books);
 
-       Button addBookButton = findViewById(R.id.addBookButton);
+        Button addBookButton = findViewById(R.id.addBookButton);
 
         addBookButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -222,9 +257,12 @@ public class MainActivity extends AppCompatActivity {
                     setContentView(R.layout.home);
                 }
             }
+
+
         });
 
     }
+    
 
     public void goToBookInfo(View v){
         setContentView(R.layout.book_info);
@@ -287,6 +325,18 @@ public class MainActivity extends AppCompatActivity {
         favoriteLayout.addView(totalFavoriteBooks);
     }
 
+    private void getSensorList(){
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        List<Sensor> sensorList  = mSensorManager.getSensorList(Sensor.TYPE_ALL);
+        StringBuilder sensorText = new StringBuilder();
+        for (Sensor currentSensor : sensorList ) {
+            sensorText.append(currentSensor.getName()).append(
+                    System.getProperty("line.separator"));
+        }
+        TextView sensorTextView = (TextView) findViewById(R.id.sensor_list);
+        sensorTextView.setText(sensorText);
+    }
+
     public void goToBorrow(View v){
         setContentView(R.layout.borrow);
         borrowLayout = findViewById(R.id.borrowLayout);
@@ -336,6 +386,8 @@ public class MainActivity extends AppCompatActivity {
 
         datePickerDialog = new DatePickerDialog(this, style, dateSetListener, year, month, day);
     }
+
+
 
     private String getTodaysDate() {
         Calendar cal = Calendar.getInstance();

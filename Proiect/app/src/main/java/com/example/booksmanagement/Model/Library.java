@@ -24,7 +24,33 @@ public class Library {
         totalNumberFavoriteBooks++;
     }
 
+    public static void removeFromFavorite(int i){
+        favoriteBooks = removeTheElement(i, favoriteBooks);
+        totalNumberFavoriteBooks--;
+    }
 
+    public static Book[] removeTheElement(int index, Book[] books)
+    {
+        if (books == null || index < 0
+                || index >= books.length) {
+
+            return books;
+        }
+
+        Book[] anotherArray = new Book[books.length - 1];
+
+        for (int i = 0, k = 0; i < books.length; i++) {
+
+
+            if (i == index) {
+                continue;
+            }
+
+            anotherArray[k++] = books[i];
+        }
+
+        return anotherArray;
+    }
 
 
 }
